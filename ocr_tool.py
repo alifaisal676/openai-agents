@@ -10,6 +10,6 @@ def ocr_image(image_path: str) -> str:
     return text.strip()
 
 # ocr_image("input-image.png")
-with open('output.txt', 'w', encoding='utf-8') as f:
-    f.write(ocr_image("sample_images/prescription_sample.png"))
+# with open('output.txt', 'w', encoding='utf-8') as f:
+#     f.write(ocr_image("sample_images/prescription_sample.png"))
 
