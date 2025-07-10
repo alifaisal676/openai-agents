@@ -1,0 +1,106 @@
+{
+  "age": "21",
+  "comments": "",
+  "date": "02 Dec, 2022",
+  "doctor_name": "Dr. Hiren Shah",
+  "gender": "Male",
+  "patient_name": "Yash M. Patel",
+  "test_results": [
+    {
+      "test_name": "Chloride",
+      "value": 101.4,
+      "unit": "mg/dL",
+      "reference_range": "98 - 107"
+    },
+    {
+      "test_name": "Proteins",
+      "value": 36.8,
+      "unit": "mg/dL",
+      "reference_range": "20-45"
+    },
+    {
+      "test_name": "Sugar",
+      "value": 54.1,
+      "unit": "mg/dL",
+      "reference_range": "40-80"
+    },
+    {
+      "test_name": "Colour",
+      "value": "Colourless",
+      "unit": "",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Quantity",
+      "value": "3 ml",
+      "unit": "",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Appearance",
+      "value": "Clear",
+      "unit": "",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Coagulum",
+      "value": "Present",
+      "unit": "",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Blood",
+      "value": "Absent",
+      "unit": "",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Total w.b.c. count",
+      "value": 5500.0,
+      "unit": "",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Polymorphs",
+      "value": "Present",
+      "unit": "",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Lymphocytes",
+      "value": "Absent",
+      "unit": "",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Rbc's",
+      "value": "Absent",
+      "unit": "",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Z.n. stain",
+      "value": "Absent",
+      "unit": "",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Cram's smear",
+      "value": "Absent",
+      "unit": "",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Afb",
+      "value": "not detected",
+      "unit": "",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Organism",
+      "value": "not detected",
+      "unit": "",
+      "reference_range": ""
+    }
+  ]
+}
