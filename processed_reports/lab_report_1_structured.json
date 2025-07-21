@@ -1,26 +1,26 @@
 {
-  "age": "21",
-  "comments": "",
-  "date": "02 Dec, 2022",
-  "doctor_name": "Dr. Hiren Shah",
-  "gender": "Male",
   "patient_name": "Yash M. Patel",
+  "age": "21 Years",
+  "gender": "Male",
+  "doctor_name": "Dr. Hiren Shah",
+  "date": "02 Dec, 2022 05:00 PM",
+  "comments": "",
   "test_results": [
     {
       "test_name": "Chloride",
-      "value": 101.4,
+      "value": "101.40",
       "unit": "mg/dL",
       "reference_range": "98 - 107"
     },
     {
       "test_name": "Proteins",
-      "value": 36.8,
+      "value": "36.80",
       "unit": "mg/dL",
       "reference_range": "20-45"
     },
     {
       "test_name": "Sugar",
-      "value": 54.1,
+      "value": "54.10",
       "unit": "mg/dL",
       "reference_range": "40-80"
     },
@@ -50,13 +50,13 @@
     },
     {
       "test_name": "Blood",
-      "value": "Absent",
+      "value": "Present",
       "unit": "",
       "reference_range": ""
     },
     {
-      "test_name": "Total w.b.c. count",
-      "value": 5500.0,
+      "test_name": "Total W.B.C. Count",
+      "value": "5500",
       "unit": "",
       "reference_range": ""
     },
@@ -73,32 +73,26 @@
       "reference_range": ""
     },
     {
-      "test_name": "Rbc's",
+      "test_name": "Any Others",
       "value": "Absent",
       "unit": "",
       "reference_range": ""
     },
     {
-      "test_name": "Z.n. stain",
-      "value": "Absent",
+      "test_name": "RBC'S",
+      "value": "",
       "unit": "",
       "reference_range": ""
     },
     {
-      "test_name": "Cram's smear",
-      "value": "Absent",
+      "test_name": "Z.N. Stain",
+      "value": "AFB not detected.",
       "unit": "",
       "reference_range": ""
     },
     {
-      "test_name": "Afb",
-      "value": "not detected",
-      "unit": "",
-      "reference_range": ""
-    },
-    {
-      "test_name": "Organism",
-      "value": "not detected",
+      "test_name": "Cram's Smear",
+      "value": "Organism not detected.",
       "unit": "",
       "reference_range": ""
     }
