@@ -119,6 +119,33 @@ def postprocess_lab_report_data(structured_data: dict) -> dict:
         logger.error(f"Post-processing failed: {str(e)}")
         return structured_data
 
+# --- Duplicate Detection Helper ---
+def is_already_processed(image_path: str, output_dir: Path) -> bool:
+    """
+    Check if an image has already been processed to avoid duplicates.
+    Returns True if both structured JSON and OCR files exist.
+    """
+    image_name = Path(image_path).stem
+    
+    # Check for structured JSON file
+    json_file = output_dir / f"{image_name}_structured.json"
+    
+    # Check for OCR file in ocr_outputs subdirectory
+    ocr_dir = output_dir / "ocr_outputs"
+    ocr_file = ocr_dir / f"{image_name}_ocr.txt"
+    
+    if json_file.exists() and ocr_file.exists():
+        logger.warning(f"⏭️  Skipping {image_name} - already processed (found {json_file.name} and ocr_outputs/{ocr_file.name})")
+        return True
+    elif json_file.exists():
+        logger.warning(f"⚠️  Partial processing found for {image_name} - JSON exists but OCR missing, will reprocess")
+        return False
+    elif ocr_file.exists():
+        logger.warning(f"⚠️  Partial processing found for {image_name} - OCR exists but JSON missing, will reprocess")
+        return False
+    else:
+        return False
+
 # --- Single Image Agent Processor (Same logic as structure2.py but with custom output) ---
 def process_single_image_with_agent(image_path: str, output_file: str) -> dict:
     """Process a single image using the same OpenAI SDK agent approach as structure2.py"""
@@ -402,7 +429,8 @@ def batch_process_lab_reports(input_dir: str, output_dir: str) -> dict:
     # Process each image using the agent approach
     results = {
         'successful_processes': [],
-        'failed_processes': []
+        'failed_processes': [],
+        'skipped_processes': []  # Track skipped files
     }
     
     for i, image_file in enumerate(image_files, 1):
@@ -411,6 +439,20 @@ def batch_process_lab_reports(input_dir: str, output_dir: str) -> dict:
         
         # Generate output file name
         output_file = output_path / f"{image_file.stem}_structured.json"
+        
+        # Check if already processed (duplicate detection)
+        if is_already_processed(str(image_file), output_path):
+            # Create a skipped result entry
+            skipped_result = {
+                "status": "skipped",
+                "image": image_file.name,
+                "reason": "already_processed",
+                "output_file": output_file.name,
+                "ocr_file": f"ocr_outputs/{image_file.stem}_ocr.txt"
+            }
+            results['skipped_processes'].append(skipped_result)
+            print(f"⏭️  SKIPPED: Already processed - 0.00s")
+            continue
         
         # Process with agent
         result = process_single_image_with_agent(str(image_file), str(output_file))
@@ -426,14 +468,19 @@ def batch_process_lab_reports(input_dir: str, output_dir: str) -> dict:
     total_duration = time.time() - batch_start_time
     successful_count = len(results['successful_processes'])
     failed_count = len(results['failed_processes'])
+    skipped_count = len(results['skipped_processes'])
+    processed_count = successful_count + failed_count  # Actually processed (not skipped)
     
     batch_summary = {
         'processing_summary': {
             'total_images': len(image_files),
             'successful': successful_count,
             'failed': failed_count,
+            'skipped': skipped_count,
+            'actually_processed': processed_count,
             'total_duration': f"{total_duration:.1f}s",
-            'average_per_image': f"{total_duration/max(len(image_files), 1):.1f}s"
+            'average_per_image': f"{total_duration/max(processed_count, 1):.1f}s",
+            'average_per_processed': f"{total_duration/max(processed_count, 1):.1f}s"
         }
     }
     
@@ -449,12 +496,20 @@ def batch_process_lab_reports(input_dir: str, output_dir: str) -> dict:
     print("\n" + "="*70)
     print("📊 BATCH PROCESSING SUMMARY")
     print("="*70)
-    print(f"Total Images: {len(image_files)}")
-    print(f"✅ Successful: {successful_count}")
+    print(f"📁 Total Images Found: {len(image_files)}")
+    print(f"✅ Successfully Processed: {successful_count}")
+    print(f"⏭️  Skipped (Already Done): {skipped_count}")
     print(f"❌ Failed: {failed_count}")
+    print(f"🔄 Actually Processed: {processed_count}")
     print(f"⏱️  Total Time: {total_duration:.1f}s")
-    print(f"📈 Average per Image: {total_duration/max(len(image_files), 1):.1f}s")
+    print(f"📈 Average per Processed: {total_duration/max(processed_count, 1):.1f}s")
     print(f"💾 Summary saved to: {summary_file}")
+    
+    if results['skipped_processes']:
+        print(f"\n⏭️  Skipped files (already processed):")
+        for skipped in results['skipped_processes']:
+            print(f"  - {skipped['image']}")
+    
     print("="*70)
     
     return final_results

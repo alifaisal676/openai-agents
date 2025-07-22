@@ -26,44 +26,44 @@
     },
     {
       "test_name": "Neutrophils",
-      "value": "a5c033",
-      "unit": "",
-      "reference_range": ""
+      "value": "",
+      "unit": "%",
+      "reference_range": "Adult: 40-04%"
     },
     {
       "test_name": "Monocyte",
       "value": "10%",
-      "unit": "",
-      "reference_range": "Child: 2-7%, Adult: "
+      "unit": "%",
+      "reference_range": "Child: 2-7%, Adult: 2-7%"
     },
     {
       "test_name": "Eosinophils",
       "value": "02%",
-      "unit": "",
-      "reference_range": "Child: 0-3%, Adult: "
+      "unit": "%",
+      "reference_range": "Child: 0-3%, Adult: 0-3%"
     },
     {
       "test_name": "Basophite",
       "value": "00%",
-      "unit": "",
+      "unit": "%",
       "reference_range": ""
     },
     {
       "test_name": "RBC Panel",
       "value": "474",
-      "unit": "x 10^12/L",
+      "unit": "x 10^12/0L",
       "reference_range": ""
     },
     {
       "test_name": "Pace",
       "value": "161%",
-      "unit": "",
+      "unit": "%",
       "reference_range": ""
     },
     {
       "test_name": "Foe",
       "value": "0.25%",
-      "unit": "",
+      "unit": "%",
       "reference_range": "<=00%"
     },
     {

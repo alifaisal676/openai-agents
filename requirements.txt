@@ -1,0 +1,18 @@
+# Lab Report Processing System Dependencies
+
+# Core Processing
+openai>=1.0.0
+groq>=0.4.0
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+
+# Image Processing
+Pillow>=10.0.0
+pytesseract>=0.3.10
+
+# Database Integration
+psycopg2-binary>=2.9.0
+supabase>=2.0.0
+
+# Utilities
+pathlib2>=2.3.7

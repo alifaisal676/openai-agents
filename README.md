@@ -77,10 +77,76 @@ processed_reports/
 └── ...
 ```
 
+## Database Integration 🗄️
+
+### **Option 1: Supabase (Recommended - Cloud)**
+
+Easy cloud PostgreSQL setup with Supabase:
+
+```bash
+# Install dependencies
+pip install psycopg2-binary supabase
+
+# Configure Supabase in .env file
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_DB_PASSWORD=your_db_password
+
+# Transfer to Supabase
+python supabase_transfer.py
+```
+
+**Supabase Setup Steps:**
+1. 🌐 Go to [supabase.com](https://supabase.com) and create account
+2. 🆕 Create new project
+3. 🔑 Copy URL, anon key, and database password to `.env`
+4. 🚀 Run `python supabase_transfer.py`
+
+### **Option 2: Local PostgreSQL**
+
+Transfer processed lab reports to local PostgreSQL database:
+
+```bash
+# Install database dependencies
+pip install psycopg2-binary
+
+# Configure database in .env file
+DB_HOST=localhost
+DB_NAME=lab_reports
+DB_USER=postgres
+DB_PASSWORD=your_password
+
+# Transfer structured data to database
+python database_transfer.py
+```
+
+**Database Features:**
+- 📊 **Automatic Schema Creation:** `patients` and `lab_tests` tables
+- 🔄 **Duplicate Prevention:** Smart conflict resolution 
+- 📈 **Normalized Structure:** Proper relationships and indexes
+- 🛡️ **Error Handling:** Transaction safety and rollbacks
+
+See `DATABASE_SETUP_GUIDE.md` for detailed setup instructions.
+
+## Complete Workflow 🔄
+
+### **With Supabase (Recommended)**
+```bash
+1. python batch_processor.py     # Process images → JSON
+2. python supabase_transfer.py   # JSON → Supabase Cloud DB
+```
+
+### **With Local PostgreSQL**
+```bash
+1. python batch_processor.py    # Process images → JSON
+2. python database_transfer.py  # JSON → Local PostgreSQL
+```
+
 ## Customization
 - **Tools:** Modify OCR, LLM, or validation functions in `batch_processor.py`
 - **Agent Behavior:** Update system prompts and tool definitions
 - **Output Format:** Adjust Pydantic models for different lab report formats
+- **Database Schema:** Extend tables in `database_transfer.py`
 
 ---
 **Author:** Ali Faisal

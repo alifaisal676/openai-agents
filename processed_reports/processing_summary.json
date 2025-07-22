@@ -1,127 +1,22 @@
 {
   "processing_summary": {
     "total_images": 2,
-    "successful": 2,
+    "successful": 1,
     "failed": 0,
-    "total_duration": "78.1s",
-    "average_per_image": "39.1s"
+    "skipped": 1,
+    "actually_processed": 1,
+    "total_duration": "11.2s",
+    "average_per_image": "11.2s",
+    "average_per_processed": "11.2s"
   },
   "successful_processes": [
-    {
-      "status": "success",
-      "image": "lab_report_1.png",
-      "patient_name": "Yash M. Patel",
-      "output_file": "lab_report_1_structured.json",
-      "ocr_file": "ocr_outputs/lab_report_1_ocr.txt",
-      "duration": 10.637378692626953,
-      "final_data": {
-        "patient_name": "Yash M. Patel",
-        "age": "21 Years",
-        "gender": "Male",
-        "doctor_name": "Dr. Hiren Shah",
-        "date": "02 Dec, 2022 05:00 PM",
-        "comments": "",
-        "test_results": [
-          {
-            "test_name": "Chloride",
-            "value": "101.40",
-            "unit": "mg/dL",
-            "reference_range": "98 - 107"
-          },
-          {
-            "test_name": "Proteins",
-            "value": "36.80",
-            "unit": "mg/dL",
-            "reference_range": "20-45"
-          },
-          {
-            "test_name": "Sugar",
-            "value": "54.10",
-            "unit": "mg/dL",
-            "reference_range": "40-80"
-          },
-          {
-            "test_name": "Colour",
-            "value": "Colourless",
-            "unit": "",
-            "reference_range": ""
-          },
-          {
-            "test_name": "Quantity",
-            "value": "3 ml",
-            "unit": "",
-            "reference_range": ""
-          },
-          {
-            "test_name": "Appearance",
-            "value": "Clear",
-            "unit": "",
-            "reference_range": ""
-          },
-          {
-            "test_name": "Coagulum",
-            "value": "Present",
-            "unit": "",
-            "reference_range": ""
-          },
-          {
-            "test_name": "Blood",
-            "value": "Present",
-            "unit": "",
-            "reference_range": ""
-          },
-          {
-            "test_name": "Total W.B.C. Count",
-            "value": "5500",
-            "unit": "",
-            "reference_range": ""
-          },
-          {
-            "test_name": "Polymorphs",
-            "value": "Present",
-            "unit": "",
-            "reference_range": ""
-          },
-          {
-            "test_name": "Lymphocytes",
-            "value": "Absent",
-            "unit": "",
-            "reference_range": ""
-          },
-          {
-            "test_name": "Any Others",
-            "value": "Absent",
-            "unit": "",
-            "reference_range": ""
-          },
-          {
-            "test_name": "RBC'S",
-            "value": "",
-            "unit": "",
-            "reference_range": ""
-          },
-          {
-            "test_name": "Z.N. Stain",
-            "value": "AFB not detected.",
-            "unit": "",
-            "reference_range": ""
-          },
-          {
-            "test_name": "Cram's Smear",
-            "value": "Organism not detected.",
-            "unit": "",
-            "reference_range": ""
-          }
-        ]
-      }
-    },
     {
       "status": "success",
       "image": "lab_report_2.png",
       "patient_name": "Murtuze Mufti Painters",
       "output_file": "lab_report_2_structured.json",
       "ocr_file": "ocr_outputs/lab_report_2_ocr.txt",
-      "duration": 67.48457932472229,
+      "duration": 11.199908018112183,
       "final_data": {
         "patient_name": "Murtuze Mufti Painters",
         "age": "",
@@ -150,44 +45,44 @@
           },
           {
             "test_name": "Neutrophils",
-            "value": "a5c033",
-            "unit": "",
-            "reference_range": ""
+            "value": "",
+            "unit": "%",
+            "reference_range": "Adult: 40-04%"
           },
           {
             "test_name": "Monocyte",
             "value": "10%",
-            "unit": "",
-            "reference_range": "Child: 2-7%, Adult: "
+            "unit": "%",
+            "reference_range": "Child: 2-7%, Adult: 2-7%"
           },
           {
             "test_name": "Eosinophils",
             "value": "02%",
-            "unit": "",
-            "reference_range": "Child: 0-3%, Adult: "
+            "unit": "%",
+            "reference_range": "Child: 0-3%, Adult: 0-3%"
           },
           {
             "test_name": "Basophite",
             "value": "00%",
-            "unit": "",
+            "unit": "%",
             "reference_range": ""
           },
           {
             "test_name": "RBC Panel",
             "value": "474",
-            "unit": "x 10^12/L",
+            "unit": "x 10^12/0L",
             "reference_range": ""
           },
           {
             "test_name": "Pace",
             "value": "161%",
-            "unit": "",
+            "unit": "%",
             "reference_range": ""
           },
           {
             "test_name": "Foe",
             "value": "0.25%",
-            "unit": "",
+            "unit": "%",
             "reference_range": "<=00%"
           },
           {
@@ -200,5 +95,14 @@
       }
     }
   ],
-  "failed_processes": []
+  "failed_processes": [],
+  "skipped_processes": [
+    {
+      "status": "skipped",
+      "image": "lab_report_1.png",
+      "reason": "already_processed",
+      "output_file": "lab_report_1_structured.json",
+      "ocr_file": "ocr_outputs/lab_report_1_ocr.txt"
+    }
+  ]
 }
