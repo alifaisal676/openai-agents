@@ -2,7 +2,7 @@
   "patient_name": "Murtuze Mufti Painters",
   "age": "",
   "gender": "M",
-  "doctor_name": "Dr. Md. Ahsanul Kerim",
+  "doctor_name": "Dr. Md. Ahsanul Kerim, Dr. Nasrin Jaan",
   "date": "2 Sep 2023",
   "comments": "",
   "test_results": [
@@ -26,50 +26,68 @@
     },
     {
       "test_name": "Neutrophils",
-      "value": "",
-      "unit": "%",
-      "reference_range": "Adult: 40-04%"
+      "value": "a5c033",
+      "unit": "",
+      "reference_range": ""
     },
     {
       "test_name": "Monocyte",
       "value": "10%",
-      "unit": "%",
-      "reference_range": "Child: 2-7%, Adult: 2-7%"
+      "unit": "",
+      "reference_range": "Child: 2-7%, Adult: 2-10%"
     },
     {
       "test_name": "Eosinophils",
       "value": "02%",
-      "unit": "%",
-      "reference_range": "Child: 0-3%, Adult: 0-3%"
+      "unit": "",
+      "reference_range": "Child: 0-3%, Adult: 0-5%"
     },
     {
       "test_name": "Basophite",
       "value": "00%",
-      "unit": "%",
+      "unit": "",
       "reference_range": ""
     },
     {
       "test_name": "RBC Panel",
       "value": "474",
-      "unit": "x 10^12/0L",
+      "unit": "x 10^12/L",
       "reference_range": ""
     },
     {
-      "test_name": "Pace",
-      "value": "161%",
-      "unit": "%",
+      "test_name": "Packed Cell Volume (PCV)",
+      "value": "40-04%",
+      "unit": "",
       "reference_range": ""
     },
     {
-      "test_name": "Foe",
-      "value": "0.25%",
-      "unit": "%",
-      "reference_range": "<=00%"
+      "test_name": "Mean Corpuscular Haemoglobin (MCH)",
+      "value": "247",
+      "unit": "pg",
+      "reference_range": ""
     },
     {
-      "test_name": "PLT Panel",
+      "test_name": "Mean Corpuscular Haemoglobin Concentration (MCHC)",
+      "value": "321",
+      "unit": "g/dL",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Red Cell Distribution Width (RDW)",
+      "value": "3.38",
+      "unit": "",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Platelet Count",
       "value": "285",
       "unit": "x 10^9/L",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Platelet Distribution Width (PDW)",
+      "value": "161%",
+      "unit": "",
       "reference_range": ""
     }
   ]

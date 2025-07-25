@@ -1,0 +1,28 @@
+MEDICAL LABORATORY
+
+Name: Samantha Miller Date oTest: 02/15/2044
+Age: 45 Report ID: 123456
+Gender: Female Doctor: Dr. John Smith
+
+REFERENCE
+TEST RESULT RANGE
+
+Complete Blood Count (CBC)
+White Blood Cell Count} 8.3 x103/uL| 3.8-10.8 x10? —
+Hemoglobin 12.8 g/dL 11.5-15.5 gdL
+
+Platelet Count 275 x10°/uL| 150-400 x10°/u
+
+Basic Metabolic Panel (BMP)
+Glucose 142 mg/dL 65 - 99 mg/dL
+Cholesterol 190 mg/dL < 200 mg/dL -
+
+HDL Cholesterol 38 mg/dL > 40 mg/dL
+
+0.4-4.0 mIU/L
+
+Thyroid Function
+TSH
+
+3.2 mIU/L
+

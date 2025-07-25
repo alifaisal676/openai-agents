@@ -50,7 +50,7 @@
     },
     {
       "test_name": "Blood",
-      "value": "Present",
+      "value": "Absent",
       "unit": "",
       "reference_range": ""
     },
@@ -86,13 +86,25 @@
     },
     {
       "test_name": "Z.N. Stain",
-      "value": "AFB not detected.",
+      "value": "Absent",
       "unit": "",
       "reference_range": ""
     },
     {
       "test_name": "Cram's Smear",
-      "value": "Organism not detected.",
+      "value": "Absent",
+      "unit": "",
+      "reference_range": ""
+    },
+    {
+      "test_name": "AFB",
+      "value": "not detected",
+      "unit": "",
+      "reference_range": ""
+    },
+    {
+      "test_name": "Organism",
+      "value": "not detected",
       "unit": "",
       "reference_range": ""
     }

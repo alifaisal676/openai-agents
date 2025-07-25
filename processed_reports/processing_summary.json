@@ -1,108 +1,32 @@
 {
-  "processing_summary": {
-    "total_images": 2,
-    "successful": 1,
+  "statistics": {
+    "total_images": 3,
+    "successful": 0,
     "failed": 0,
-    "skipped": 1,
-    "actually_processed": 1,
-    "total_duration": "11.2s",
-    "average_per_image": "11.2s",
-    "average_per_processed": "11.2s"
+    "skipped": 3,
+    "processed": 0,
+    "duration": "0.0s",
+    "avg_per_image": "0.0s"
   },
-  "successful_processes": [
-    {
-      "status": "success",
-      "image": "lab_report_2.png",
-      "patient_name": "Murtuze Mufti Painters",
-      "output_file": "lab_report_2_structured.json",
-      "ocr_file": "ocr_outputs/lab_report_2_ocr.txt",
-      "duration": 11.199908018112183,
-      "final_data": {
-        "patient_name": "Murtuze Mufti Painters",
-        "age": "",
-        "gender": "M",
-        "doctor_name": "Dr. Md. Ahsanul Kerim",
-        "date": "2 Sep 2023",
-        "comments": "",
-        "test_results": [
-          {
-            "test_name": "Haemoglobin",
-            "value": "117",
-            "unit": "g/dL",
-            "reference_range": "M: 13-17, F: 15-16"
-          },
-          {
-            "test_name": "ESP (Westeraren Mathod)",
-            "value": "",
-            "unit": "mm",
-            "reference_range": "M: 0-10, F: 0-15"
-          },
-          {
-            "test_name": "Total Count",
-            "value": "428",
-            "unit": "x 10^8/uL",
-            "reference_range": ""
-          },
-          {
-            "test_name": "Neutrophils",
-            "value": "",
-            "unit": "%",
-            "reference_range": "Adult: 40-04%"
-          },
-          {
-            "test_name": "Monocyte",
-            "value": "10%",
-            "unit": "%",
-            "reference_range": "Child: 2-7%, Adult: 2-7%"
-          },
-          {
-            "test_name": "Eosinophils",
-            "value": "02%",
-            "unit": "%",
-            "reference_range": "Child: 0-3%, Adult: 0-3%"
-          },
-          {
-            "test_name": "Basophite",
-            "value": "00%",
-            "unit": "%",
-            "reference_range": ""
-          },
-          {
-            "test_name": "RBC Panel",
-            "value": "474",
-            "unit": "x 10^12/0L",
-            "reference_range": ""
-          },
-          {
-            "test_name": "Pace",
-            "value": "161%",
-            "unit": "%",
-            "reference_range": ""
-          },
-          {
-            "test_name": "Foe",
-            "value": "0.25%",
-            "unit": "%",
-            "reference_range": "<=00%"
-          },
-          {
-            "test_name": "PLT Panel",
-            "value": "285",
-            "unit": "x 10^9/L",
-            "reference_range": ""
-          }
-        ]
+  "results": {
+    "successful": [],
+    "failed": [],
+    "skipped": [
+      {
+        "image": "lab_report_1.png",
+        "reason": "already_processed",
+        "output_file": "lab_report_1_structured.json"
+      },
+      {
+        "image": "lab_report_2.png",
+        "reason": "already_processed",
+        "output_file": "lab_report_2_structured.json"
+      },
+      {
+        "image": "lab_report_3.png",
+        "reason": "already_processed",
+        "output_file": "lab_report_3_structured.json"
       }
-    }
-  ],
-  "failed_processes": [],
-  "skipped_processes": [
-    {
-      "status": "skipped",
-      "image": "lab_report_1.png",
-      "reason": "already_processed",
-      "output_file": "lab_report_1_structured.json",
-      "ocr_file": "ocr_outputs/lab_report_1_ocr.txt"
-    }
-  ]
+    ]
+  }
 }
