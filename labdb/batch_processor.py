@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 class BatchProcessor:
     def __init__(self, processor):
         self.processor = processor
+        
 
     def _find_json_files(self, directory_path):
         directory = Path(directory_path)
@@ -17,6 +18,7 @@ class BatchProcessor:
         logger.info(f"Found {len(json_files)} JSON files to process")
         return json_files
 
+
     def _calculate_batch_stats(self, results, start_time, end_time, total_files):
         return {
             'total_files': total_files,
@@ -26,6 +28,7 @@ class BatchProcessor:
             'successful_files': len(results['successful']),
             'failed_files': len(results['failed'])
         }
+
 
     def batch_process_directory(self, directory_path):
         start_time = datetime.now()
@@ -45,6 +48,8 @@ class BatchProcessor:
         end_time = datetime.now()
         results['statistics'] = self._calculate_batch_stats(results, start_time, end_time, len(json_files))
         return results
+
+
 
     # Inspector features
     def list_patients(self):

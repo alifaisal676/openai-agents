@@ -15,9 +15,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# -------------------
-# Main entry point
-# -------------------
+
 
 
 import sys
@@ -65,6 +63,8 @@ def main():
                     logger.warning(f"Failed to delete patient: {patient_id}")
                 return
 
+
+
         # Default: batch process
         initial_stats = db_manager.get_database_stats()
         logger.info(f"Initial SQLite Stats: {initial_stats}")
@@ -85,6 +85,9 @@ def main():
         logger.info(f"Processing Time: {stats['processing_time']:.2f}s")
         logger.info("\nSQLite Database Summary")
         logger.info("-"*40)
+        
+        
+        
         logger.info(f"Total Patients: {final_stats.get('total_patients', 'N/A')}")
         logger.info(f"Total Tests: {final_stats.get('total_tests', 'N/A')}")
         logger.info(f"Unique Test Types: {final_stats.get('unique_test_types', 'N/A')}")
@@ -105,6 +108,7 @@ def main():
         logger.error("Transfer failed.")
     finally:
         db_manager.close()
+
 
 if __name__ == "__main__":
     main()

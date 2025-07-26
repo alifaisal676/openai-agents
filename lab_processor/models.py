@@ -1,6 +1,3 @@
-"""
-Data models for lab report processing.
-"""
 from typing import List, Optional
 from pydantic import BaseModel, ValidationError
 
@@ -20,7 +17,7 @@ class LabReport(BaseModel):
     test_results: List[LabTest] = []
 
 def validate_lab_data(data: dict) -> dict:
-    """Validate lab report data using Pydantic models."""
+   
     try:
         validated = LabReport(**data)
         return validated.model_dump()

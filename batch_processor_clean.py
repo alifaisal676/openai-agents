@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-"""
-Lab Report Batch Processor
-
-A clean, modular system for processing lab report images into structured JSON data.
-Uses OpenAI SDK with agent-based approach for reliable extraction and validation.
-
-Usage:
-    python batch_processor_clean.py
-    
-    Processes images from 'lab_images' directory
-    Outputs structured JSON to 'processed_reports' directory
-"""
-
 import logging
 from pathlib import Path
 
@@ -26,38 +12,33 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 def main():
-    """Main entry point for batch processing."""
+   
     
     # Configuration
     input_directory = "lab_images"
     output_directory = "processed_reports"
     
-    logger.info("Lab Report Batch Processor")
-    logger.info(f"Input: {input_directory}")
-    logger.info(f"Output: {output_directory}")
+    logger.info("Starting batch processing of lab reports...")
+    logger.info(f"Looking for images in: {input_directory}")
+    logger.info(f"Processed reports will be saved to: {output_directory}")
 
-    # Check input directory exists
     if not Path(input_directory).exists():
-        logger.error(f"❌ Input directory '{input_directory}' not found")
-        logger.error("Please create the directory and add lab report images")
+        logger.error(f"Input folder '{input_directory}' does not exist.")
+        logger.error("Please create it and add your lab report images before running this script.")
         return
 
     try:
-        # Run batch processing
         processor = BatchProcessor()
         results = processor.process_directory(input_directory, output_directory)
-
-        # Simple success message
         stats = results['statistics']
         if stats['successful'] > 0:
-            logger.info(f"\n✅ Successfully processed {stats['successful']} lab reports")
+            logger.info(f"All done! {stats['successful']} lab reports processed successfully.")
         if stats['failed'] > 0:
-            logger.warning(f"⚠️  {stats['failed']} files failed to process")
-
+            logger.warning(f"{stats['failed']} files could not be processed. Please check the logs above for details.")
     except KeyboardInterrupt:
-        logger.warning("\n⏹️  Processing interrupted by user")
+        logger.warning("Batch processing stopped by user.")
     except Exception as e:
-        logger.error(f"\n❌ Processing failed: {e}")
+        logger.error(f"Something went wrong: {e}")
         logging.error(f"Batch processing error: {e}")
 
 if __name__ == "__main__":

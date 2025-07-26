@@ -20,6 +20,7 @@ class SQLiteLabReportManager:
             logger.error(f"SQLite connection failed: {e}")
             return False
 
+
     def create_tables(self):
         try:
             c = self.connection.cursor()
@@ -58,11 +59,16 @@ class SQLiteLabReportManager:
             logger.error(f"Table creation failed: {e}")
             return False
 
+
+
     def close(self):
         if self.connection:
             self.connection.close()
             self.connection = None
         logger.info("SQLite connection closed")
+
+
+
 
     def get_database_stats(self):
         try:
@@ -81,6 +87,8 @@ class SQLiteLabReportManager:
             logger.error(f"Stats failed: {e}")
             return {}
 
+
+
     def list_patients(self):
         try:
             c = self.connection.cursor()
@@ -90,6 +98,8 @@ class SQLiteLabReportManager:
             logger.error(f"List patients failed: {e}")
             return []
 
+
+
     def get_patient_tests(self, patient_id):
         try:
             c = self.connection.cursor()
@@ -98,6 +108,8 @@ class SQLiteLabReportManager:
         except Exception as e:
             logger.error(f"Get patient tests failed: {e}")
             return []
+
+
 
     def delete_patient(self, patient_id):
         try:

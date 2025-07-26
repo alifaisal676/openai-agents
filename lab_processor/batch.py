@@ -1,6 +1,3 @@
-"""
-Batch processor for multiple lab reports.
-"""
 import json
 import time
 import logging
@@ -12,7 +9,6 @@ from .utils import find_lab_images, is_already_processed, setup_output_directory
 logger = logging.getLogger(__name__)
 
 class BatchProcessor:
-    """Processes multiple lab report images."""
     
     def __init__(self):
         self.agent = LabReportAgent()
@@ -23,41 +19,37 @@ class BatchProcessor:
         }
     
     def process_directory(self, input_dir: str, output_dir: str) -> dict:
-        """Process all lab images in directory."""
+       
         start_time = time.time()
-        
         input_path = Path(input_dir)
         output_path = Path(output_dir)
-        
         setup_output_directory(output_path)
         images = find_lab_images(input_path)
-        
-        print(f"\nFound {len(images)} images to process")
-        print("-" * 50)
-        
+
+        logger.info(f"Found {len(images)} images to process")
         for i, image_path in enumerate(images, 1):
-            print(f"Processing {i}/{len(images)}: {image_path.name}")
-            
+            logger.info(f"Processing {i}/{len(images)}: {image_path.name}")
             if is_already_processed(image_path, output_path):
                 self._add_skipped_result(image_path, output_path)
-                print("  → Skipped (already done)")
+                logger.info("  → Skipped (already done)")
                 continue
-            
             output_file = get_output_filename(image_path, output_path)
             result = self.agent.process_image(str(image_path), str(output_file))
-            
             self._categorize_result(result)
-            self._print_result(result)
-        
+            self._log_result(result)
         return self._create_summary(len(images), time.time() - start_time, output_path)
     
+    
+    
     def _add_skipped_result(self, image_path: Path, output_path: Path):
-        """Add skipped file to results."""
+
         self.results['skipped'].append({
             'image': image_path.name,
             'reason': 'already_processed',
             'output_file': f"{image_path.stem}_structured.json"
         })
+        
+        
     
     def _categorize_result(self, result: dict):
         """Sort result into appropriate category."""
@@ -66,12 +58,16 @@ class BatchProcessor:
         else:
             self.results['failed'].append(result)
     
-    def _print_result(self, result: dict):
-        """Print processing result."""
+    
+    
+    def _log_result(self, result: dict):
+        """Log processing result."""
         if result['status'] == 'success':
-            print(f"  ✅ {result['patient_name']} ({result['duration']:.1f}s)")
+            logger.info(f"  ✅ {result['patient_name']} ({result['duration']:.1f}s)")
         else:
-            print(f"  ❌ Failed: {result.get('error', 'Unknown')} ({result['duration']:.1f}s)")
+            logger.warning(f"  ❌ Failed: {result.get('error', 'Unknown')} ({result['duration']:.1f}s)")
+    
+    
     
     def _create_summary(self, total_images: int, duration: float, output_path: Path) -> dict:
         """Create processing summary."""
@@ -101,15 +97,18 @@ class BatchProcessor:
         self._print_summary(summary['statistics'])
         return summary
     
+    
+    
+    
     def _print_summary(self, stats: dict):
-        """Print final processing summary."""
-        print("\n" + "="*50)
-        print("PROCESSING SUMMARY")
-        print("="*50)
-        print(f"Total Images: {stats['total_images']}")
-        print(f"✅ Successful: {stats['successful']}")
-        print(f"⏭️  Skipped: {stats['skipped']}")
-        print(f"❌ Failed: {stats['failed']}")
-        print(f"⏱️  Duration: {stats['duration']}")
-        print(f"📊 Avg/Image: {stats['avg_per_image']}")
-        print("="*50)
+        """Log final processing summary."""
+        logger.info("\n" + "="*40)
+        logger.info("PROCESSING SUMMARY")
+        logger.info("="*40)
+        logger.info(f"Total Images: {stats['total_images']}")
+        logger.info(f"✅ Successful: {stats['successful']}")
+        logger.info(f"⏭️  Skipped: {stats['skipped']}")
+        logger.info(f"❌ Failed: {stats['failed']}")
+        logger.info(f"⏱️  Duration: {stats['duration']}")
+        logger.info(f"📊 Avg/Image: {stats['avg_per_image']}")
+        logger.info("="*40)

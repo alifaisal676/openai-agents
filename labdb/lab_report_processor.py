@@ -5,45 +5,57 @@ import json
 
 logger = logging.getLogger(__name__)
 
+
 class LabReportProcessor:
+    
     def __init__(self, db_manager):
         self.db_manager = db_manager
 
-    def insert_patient(self, patient_data):
+
+
+    def insert_patient(self, patient):
+       
         try:
             c = self.db_manager.connection.cursor()
+            # Try to parse the date in a flexible way
             test_date = None
-            if patient_data.get('date'):
+            if patient.get('date'):
                 for fmt in ['%d %b, %Y', '%Y-%m-%d', '%d/%m/%Y', '%m/%d/%Y']:
                     try:
-                        test_date = datetime.strptime(patient_data['date'], fmt).date().isoformat()
+                        test_date = datetime.strptime(patient['date'], fmt).date().isoformat()
                         break
                     except ValueError:
                         continue
-            patient_id = patient_data.get('patient_id') or patient_data.get('patient_name', 'Unknown').replace(' ', '_')
+            patient_id = patient.get('patient_id') or patient.get('patient_name', 'Unknown').replace(' ', '_')
             c.execute("SELECT COUNT(*) FROM patients WHERE patient_id = ?", (patient_id,))
             if c.fetchone()[0] > 0:
-                logger.info(f"Patient exists: {patient_data.get('patient_name')} ({patient_id})")
+                logger.info(f"Patient already exists: {patient.get('patient_name')} ({patient_id})")
                 return True
-            c.execute("""
+            c.execute(
+                """
                 INSERT INTO patients (patient_id, patient_name, age, gender, doctor_name, test_date, lab_name, comments)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                patient_id,
-                patient_data.get('patient_name', 'Unknown'),
-                patient_data.get('age', ''),
-                patient_data.get('gender', ''),
-                patient_data.get('doctor_name', ''),
-                test_date,
-                patient_data.get('lab_name', ''),
-                patient_data.get('comments', '')
-            ))
+                """,
+                (
+                    patient_id,
+                    patient.get('patient_name', 'Unknown'),
+                    patient.get('age', ''),
+                    patient.get('gender', ''),
+                    patient.get('doctor_name', ''),
+                    test_date,
+                    patient.get('lab_name', ''),
+                    patient.get('comments', '')
+                )
+            )
             self.db_manager.connection.commit()
-            logger.info(f"Inserted patient: {patient_data.get('patient_name')} ({patient_id})")
+            logger.info(f"Added patient: {patient.get('patient_name')} ({patient_id})")
             return True
         except Exception as e:
-            logger.error(f"Patient insert failed: {e}")
+            logger.error(f"Could not insert patient: {e}")
             return False
+        
+        
+        
 
     def insert_tests(self, patient_id, test_results):
         count = 0
@@ -54,38 +66,45 @@ class LabReportProcessor:
             for test in test_results:
                 name = (test.get('test_name', 'Unknown Test') or '').strip().lower()
                 if name in existing:
-                    logger.info(f"Skip duplicate test '{test.get('test_name')}' for {patient_id}")
+                    logger.info(f"Duplicate test skipped: '{test.get('test_name')}' for {patient_id}")
                     continue
                 try:
-                    c.execute("""
+                    c.execute(
+                        """
                         INSERT INTO lab_tests (patient_id, test_name, test_result, units, reference_range, status)
                         VALUES (?, ?, ?, ?, ?, ?)
-                    """, (
-                        patient_id,
-                        test.get('test_name', 'Unknown Test'),
-                        test.get('value', test.get('result', '')),
-                        test.get('unit', ''),
-                        test.get('reference_range', ''),
-                        test.get('status', '')
-                    ))
+                        """,
+                        (
+                            patient_id,
+                            test.get('test_name', 'Unknown Test'),
+                            test.get('value', test.get('result', '')),
+                            test.get('unit', ''),
+                            test.get('reference_range', ''),
+                            test.get('status', '')
+                        )
+                    )
                     count += 1
                     existing.add(name)
                 except Exception as e:
-                    logger.warning(f"Test insert failed: {test.get('test_name')}: {e}")
+                    logger.warning(f"Could not insert test '{test.get('test_name')}': {e}")
                     continue
             self.db_manager.connection.commit()
-            logger.info(f"Inserted {count}/{len(test_results)} new tests for {patient_id}")
+            logger.info(f"Inserted {count} new tests for {patient_id}")
             return count
         except Exception as e:
-            logger.error(f"Test insert failed: {e}")
+            logger.error(f"Test insertion failed: {e}")
             return 0
 
+
+
+
     def process_json_file(self, json_file_path):
+       
         try:
             with open(json_file_path, 'r', encoding='utf-8') as f:
                 lab_data = json.load(f)
             filename = Path(json_file_path).name
-            logger.info(f"Processing file: {filename}")
+            logger.info(f"Processing: {filename}")
             patient_id = lab_data.get('patient_id') or lab_data.get('patient_name', 'Unknown').replace(' ', '_')
             patient_success = self.insert_patient(lab_data)
             test_results = lab_data.get('test_results', [])
@@ -100,7 +119,7 @@ class LabReportProcessor:
                 'patient_inserted': patient_success
             }
         except Exception as e:
-            logger.error(f"Process failed: {json_file_path}: {e}")
+            logger.error(f"Failed to process {json_file_path}: {e}")
             return {
                 'file': Path(json_file_path).name,
                 'status': 'failed',
