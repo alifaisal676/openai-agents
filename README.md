@@ -346,8 +346,8 @@ SPECIALIZED_PROMPTS = {
 ├── 📄 README.md                    # This documentation
 ├── 📁 lab_images/                  # Input images directory
 ├── 📁 processed_reports/           # Output JSON & OCR files
-│   ├── 📁 ocr_outputs/            # Raw OCR text files
-│   └── 📊 processing_summary.json # Batch statistics
+│   ├── 📁 ocr_outputs/             # Raw OCR text files
+│   └── 📊 processing_summary.json  # Batch statistics
 └── 📁 __pycache__/                 # Python cache files
 ```
 
@@ -357,51 +357,24 @@ SPECIALIZED_PROMPTS = {
 ```
 ✅ Processed 50+ lab reports with 98% accuracy
 ✅ Reduced manual data entry time by 95%
-✅ Successfully integrated with cloud database
-✅ Zero data loss with robust error handling
-✅ Scalable architecture handles growing datasets
+✅ Robust error handling, no data loss
+✅ Scalable for growing datasets
 ```
 
 ### **Use Cases**
 - **🏥 Medical Clinics:** Digitize paper lab reports
-- **🔬 Research Labs:** Batch process experimental results  
+- **🔬 Research Labs:** Batch process experimental results
 - **🏢 Healthcare Admin:** Automate patient data entry
-- **📊 Data Analytics:** Structure unorganized medical data
-- **🔄 System Migration:** Convert legacy reports to modern formats
 
-## 🚀 Future Enhancements
+## �️ Database Schema
+- `patients`: id, patient_id, patient_name, age, gender, doctor_name, test_date, lab_name, comments, created_at
+- `lab_tests`: id, patient_id, test_name, test_result, units, reference_range, status, created_at
 
-### **Planned Features**
-- **📱 Web Interface:** Browser-based upload and processing
-- **🔄 Real-time Processing:** Live image processing as files are added
-- **📧 Email Integration:** Process lab reports from email attachments
-- **📈 Advanced Analytics:** ML-powered insights and trends
-- **🌍 Multi-language OCR:** Support for non-English lab reports
+## �️ Example Output
+Batch processing and database transfer will log concise progress and summary info to the console. See `processed_reports/processing_summary.json` for batch stats.
 
-### **Contributing**
-Contributions are welcome! Please feel free to submit pull requests or open issues for:
-- 🐛 Bug fixes
-- ✨ New features  
-- 📚 Documentation improvements
-- 🧪 Test case additions
-- 💡 Performance optimizations
-
----
-
-## 📞 Support & Contact
+## 🤝 Contributing & Support
+Contributions and issues are welcome! See GitHub for details.
 
 **Author:** Ali Faisal  
-**Repository:** [openai-agents/ocr-data-structuring](https://github.com/alifaisal676/openai-agents)  
-**Issues:** Report bugs and request features via GitHub Issues  
-
-### **Getting Help**
-1. 📖 Check this README for common solutions
-2. 🔍 Search existing GitHub Issues  
-3. 💬 Open a new issue with detailed description
-4. 📧 Contact for enterprise support needs
-
----
-
-**⭐ If this project helped you, please give it a star on GitHub!**
-
-*Last Updated: July 2025*
+**Repo:** [openai-agents/ocr-data-structuring](https://github.com/alifaisal676/openai-agents)
