@@ -17,11 +17,13 @@ from pathlib import Path
 
 from lab_processor.batch import BatchProcessor
 
+
 # Simple logging setup
 logging.basicConfig(
     level=logging.WARNING,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
+logger = logging.getLogger(__name__)
 
 def main():
     """Main entry point for batch processing."""
@@ -30,32 +32,32 @@ def main():
     input_directory = "lab_images"
     output_directory = "processed_reports"
     
-    print("Lab Report Batch Processor")
-    print(f"Input: {input_directory}")
-    print(f"Output: {output_directory}")
-    
+    logger.info("Lab Report Batch Processor")
+    logger.info(f"Input: {input_directory}")
+    logger.info(f"Output: {output_directory}")
+
     # Check input directory exists
     if not Path(input_directory).exists():
-        print(f"❌ Input directory '{input_directory}' not found")
-        print("Please create the directory and add lab report images")
+        logger.error(f"❌ Input directory '{input_directory}' not found")
+        logger.error("Please create the directory and add lab report images")
         return
-    
+
     try:
         # Run batch processing
         processor = BatchProcessor()
         results = processor.process_directory(input_directory, output_directory)
-        
+
         # Simple success message
         stats = results['statistics']
         if stats['successful'] > 0:
-            print(f"\n✅ Successfully processed {stats['successful']} lab reports")
+            logger.info(f"\n✅ Successfully processed {stats['successful']} lab reports")
         if stats['failed'] > 0:
-            print(f"⚠️  {stats['failed']} files failed to process")
-            
+            logger.warning(f"⚠️  {stats['failed']} files failed to process")
+
     except KeyboardInterrupt:
-        print("\n⏹️  Processing interrupted by user")
+        logger.warning("\n⏹️  Processing interrupted by user")
     except Exception as e:
-        print(f"\n❌ Processing failed: {e}")
+        logger.error(f"\n❌ Processing failed: {e}")
         logging.error(f"Batch processing error: {e}")
 
 if __name__ == "__main__":
