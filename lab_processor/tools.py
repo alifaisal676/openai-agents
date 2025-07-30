@@ -9,10 +9,13 @@ from openai import OpenAI
 from .config import GROQ_API_KEY, GROQ_BASE_URL, MODEL_NAME, MAX_TOKENS, TIMEOUT, TEMPERATURE, STRUCTURE_PROMPT
 from .models import validate_lab_data
 
+from langsmith import traceable
+
+
 # Initialize OpenAI client
 client = OpenAI(api_key=GROQ_API_KEY, base_url=GROQ_BASE_URL)
 
-
+@traceable(name="extract_text")
 def extract_text_from_image(image_path: str) -> str:
     try:
         img = Image.open(image_path)
@@ -21,7 +24,7 @@ def extract_text_from_image(image_path: str) -> str:
         raise Exception(f"OCR failed: {str(e)}")
     
     
-
+@traceable(name="structure_data")
 def structure_text_data(text: str) -> dict:
     try:
         response = client.chat.completions.create(
@@ -47,7 +50,7 @@ def structure_text_data(text: str) -> dict:
         return {"error": f"Structuring failed: {str(e)}"}
 
 
-
+@traceable(name="validate_data")
 def validate_structured_data(data: dict) -> dict:
     return validate_lab_data(data)
 

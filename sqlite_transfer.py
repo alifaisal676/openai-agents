@@ -1,5 +1,3 @@
-
-
 import logging
 from pathlib import Path
 
@@ -24,9 +22,6 @@ def main():
     database_file = str(Path("labdb") / "lab_reports.db")
     logger.info("\n" + "="*60)
     logger.info("Lab Reports → SQLite Database Transfer")
-    logger.info("="*60)
-    logger.info(f"Source Directory: {json_directory}")
-    logger.info(f"Target Database: {database_file}")
     logger.info("="*60)
     db_manager = SQLiteLabReportManager(database_file)
     processor = LabReportProcessor(db_manager)
@@ -77,32 +72,13 @@ def main():
             return
         final_stats = db_manager.get_database_stats()
         stats = results['statistics']
-        logger.info("\nTransfer Results")
+        logger.info("\nTransfer Summary")
         logger.info("-"*40)
-        logger.info(f"Files Processed: {stats['successful_files']}/{stats['total_files']}")
-        logger.info(f"Unique Patients: {stats['total_patients']}")
-        logger.info(f"Tests Transferred: {stats['total_tests']}")
-        logger.info(f"Processing Time: {stats['processing_time']:.2f}s")
-        logger.info("\nSQLite Database Summary")
-        logger.info("-"*40)
-        
-        
-        
-        logger.info(f"Total Patients: {final_stats.get('total_patients', 'N/A')}")
-        logger.info(f"Total Tests: {final_stats.get('total_tests', 'N/A')}")
-        logger.info(f"Unique Test Types: {final_stats.get('unique_test_types', 'N/A')}")
-        logger.info(f"Database Size: {final_stats.get('database_size_mb', 'N/A')} MB")
-        if results['successful']:
-            logger.info("\nSuccessfully Processed Files:")
-            for result in results['successful']:
-                logger.info(f"  - {result['file']}: {result['patient_name']} ({result['tests_inserted']} tests)")
+        logger.info(f"Files Processed: {stats['successful_files']}/{stats['total_files']} | Patients: {stats['total_patients']} | Tests: {stats['total_tests']} | Time: {stats['processing_time']:.2f}s")
+        logger.info(f"Database: {Path(database_file).absolute()} | Size: {final_stats.get('database_size_mb', 'N/A')} MB")
         if results['failed']:
-            logger.warning("\nFailed Files:")
-            for result in results['failed']:
-                logger.warning(f"  - {result['file']}: {result.get('error', 'Unknown error')}")
-        logger.info("="*60)
+            logger.warning(f"Failed Files: {len(results['failed'])}")
         logger.info("SQLite transfer completed.")
-        logger.info(f"Database location: {Path(database_file).absolute()}")
     except Exception as e:
         logger.error(f"Unexpected error: {e}")
         logger.error("Transfer failed.")

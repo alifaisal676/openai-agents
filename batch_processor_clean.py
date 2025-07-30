@@ -6,7 +6,7 @@ from lab_processor.batch import BatchProcessor
 
 # Simple logging setup
 logging.basicConfig(
-    level=logging.WARNING,
+    level=logging.INFO,  # Changed from WARNING to INFO
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
@@ -31,6 +31,13 @@ def main():
         processor = BatchProcessor()
         results = processor.process_directory(input_directory, output_directory)
         stats = results['statistics']
+        # Show a concise summary log at the end
+        logger.info(
+            f"Batch Summary: "
+            f"Processed: {stats.get('successful', 0)}, "
+            f"Skipped: {stats.get('skipped', 0)}, "
+            f"Failed: {stats.get('failed', 0)}"
+        )
         if stats['successful'] > 0:
             logger.info(f"All done! {stats['successful']} lab reports processed successfully.")
         if stats['failed'] > 0:

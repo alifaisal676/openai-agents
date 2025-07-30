@@ -1,3 +1,5 @@
+
+from langsmith import traceable
 """
 Agent for processing a single lab report image into structured data using OpenAI tools.
 """
@@ -7,8 +9,13 @@ import logging
 from pathlib import Path
 from openai import OpenAI
 
-from .config import GROQ_API_KEY, GROQ_BASE_URL, MODEL_NAME, MAX_TOKENS, TIMEOUT, TEMPERATURE, SYSTEM_PROMPT, MAX_ITERATIONS
+from .config import GROQ_API_KEY, GROQ_BASE_URL, MODEL_NAME, MAX_TOKENS, TIMEOUT, TEMPERATURE, SYSTEM_PROMPT, MAX_ITERATIONS,LANGCHAIN_API_KEY,LANGCHAIN_PROJECT,LANGCHAIN_TRACING_V2
 from .tools import extract_text_from_image, structure_text_data, validate_structured_data, save_ocr_output, save_structured_data
+
+
+
+
+
 
 
 logger = logging.getLogger(__name__)
@@ -31,6 +38,7 @@ class LabReportAgent:
 
 
 
+    @traceable(name="process_image")
     def process_image(self, image_path: str, output_file: str) -> dict:
         
         start = time.time()

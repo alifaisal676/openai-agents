@@ -10,6 +10,11 @@ load_dotenv()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_BASE_URL = "https://api.groq.com/openai/v1"
 MODEL_NAME = "llama3-70b-8192"
+LANGCHAIN_TRACING_V2="true"
+LANGCHAIN_API_KEY=os.getenv("LANGCHAIN_API_KEY")
+LANGCHAIN_PROJECT="LabReportAgentTrace"
+
+
 
 # Processing Configuration
 MAX_TOKENS = 800

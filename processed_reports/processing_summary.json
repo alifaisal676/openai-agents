@@ -1,15 +1,75 @@
 {
   "statistics": {
     "total_images": 3,
-    "successful": 0,
+    "successful": 1,
     "failed": 0,
-    "skipped": 3,
-    "processed": 0,
-    "duration": "0.0s",
-    "avg_per_image": "0.0s"
+    "skipped": 2,
+    "processed": 1,
+    "duration": "7.8s",
+    "avg_per_image": "7.8s"
   },
   "results": {
-    "successful": [],
+    "successful": [
+      {
+        "status": "success",
+        "image": "lab_report_3.png",
+        "patient_name": "Samantha Miller",
+        "output_file": "lab_report_3_structured.json",
+        "duration": 7.658461809158325,
+        "data": {
+          "patient_name": "Samantha Miller",
+          "age": "45",
+          "gender": "Female",
+          "doctor_name": "Dr. John Smith",
+          "date": "02/15/2044",
+          "comments": "",
+          "test_results": [
+            {
+              "test_name": "White Blood Cell Count",
+              "value": "8.3",
+              "unit": "x103/uL",
+              "reference_range": "3.8-10.8 x10?"
+            },
+            {
+              "test_name": "Hemoglobin",
+              "value": "12.8",
+              "unit": "g/dL",
+              "reference_range": "11.5-15.5 gdL"
+            },
+            {
+              "test_name": "Platelet Count",
+              "value": "275",
+              "unit": "x10°/uL",
+              "reference_range": "150-400 x10°/u"
+            },
+            {
+              "test_name": "Glucose",
+              "value": "142",
+              "unit": "mg/dL",
+              "reference_range": "65 - 99 mg/dL"
+            },
+            {
+              "test_name": "Cholesterol",
+              "value": "190",
+              "unit": "mg/dL",
+              "reference_range": "< 200 mg/dL"
+            },
+            {
+              "test_name": "HDL Cholesterol",
+              "value": "38",
+              "unit": "mg/dL",
+              "reference_range": "> 40 mg/dL"
+            },
+            {
+              "test_name": "TSH",
+              "value": "3.2",
+              "unit": "mIU/L",
+              "reference_range": "0.4-4.0 mIU/L"
+            }
+          ]
+        }
+      }
+    ],
     "failed": [],
     "skipped": [
       {
@@ -21,11 +81,6 @@
         "image": "lab_report_2.png",
         "reason": "already_processed",
         "output_file": "lab_report_2_structured.json"
-      },
-      {
-        "image": "lab_report_3.png",
-        "reason": "already_processed",
-        "output_file": "lab_report_3_structured.json"
       }
     ]
   }

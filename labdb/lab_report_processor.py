@@ -14,7 +14,6 @@ class LabReportProcessor:
 
 
     def insert_patient(self, patient):
-       
         try:
             c = self.db_manager.connection.cursor()
             # Try to parse the date in a flexible way
@@ -30,7 +29,7 @@ class LabReportProcessor:
             c.execute("SELECT COUNT(*) FROM patients WHERE patient_id = ?", (patient_id,))
             if c.fetchone()[0] > 0:
                 logger.info(f"Patient already exists: {patient.get('patient_name')} ({patient_id})")
-                return True
+                return True, True  # (success, already_exists)
             c.execute(
                 """
                 INSERT INTO patients (patient_id, patient_name, age, gender, doctor_name, test_date, lab_name, comments)
@@ -49,15 +48,18 @@ class LabReportProcessor:
             )
             self.db_manager.connection.commit()
             logger.info(f"Added patient: {patient.get('patient_name')} ({patient_id})")
-            return True
+            return True, False  # (success, already_exists)
         except Exception as e:
             logger.error(f"Could not insert patient: {e}")
-            return False
+            return False, False
         
         
         
 
-    def insert_tests(self, patient_id, test_results):
+    def insert_tests(self, patient_id, test_results, skip_all=False):
+        if skip_all:
+            logger.info(f"Patient already exists, skipping all tests for {patient_id}.")
+            return 0
         count = 0
         try:
             c = self.db_manager.connection.cursor()
@@ -66,7 +68,6 @@ class LabReportProcessor:
             for test in test_results:
                 name = (test.get('test_name', 'Unknown Test') or '').strip().lower()
                 if name in existing:
-                    logger.info(f"Duplicate test skipped: '{test.get('test_name')}' for {patient_id}")
                     continue
                 try:
                     c.execute(
@@ -99,16 +100,15 @@ class LabReportProcessor:
 
 
     def process_json_file(self, json_file_path):
-       
         try:
             with open(json_file_path, 'r', encoding='utf-8') as f:
                 lab_data = json.load(f)
             filename = Path(json_file_path).name
             logger.info(f"Processing: {filename}")
             patient_id = lab_data.get('patient_id') or lab_data.get('patient_name', 'Unknown').replace(' ', '_')
-            patient_success = self.insert_patient(lab_data)
+            patient_success, already_exists = self.insert_patient(lab_data)
             test_results = lab_data.get('test_results', [])
-            tests_inserted = self.insert_tests(patient_id, test_results)
+            tests_inserted = self.insert_tests(patient_id, test_results, skip_all=already_exists)
             return {
                 'file': filename,
                 'status': 'success',

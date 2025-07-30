@@ -52,7 +52,6 @@ class BatchProcessor:
         
     
     def _categorize_result(self, result: dict):
-        """Sort result into appropriate category."""
         if result['status'] == 'success':
             self.results['successful'].append(result)
         else:
@@ -70,7 +69,6 @@ class BatchProcessor:
     
     
     def _create_summary(self, total_images: int, duration: float, output_path: Path) -> dict:
-        """Create processing summary."""
         successful = len(self.results['successful'])
         failed = len(self.results['failed'])
         skipped = len(self.results['skipped'])
