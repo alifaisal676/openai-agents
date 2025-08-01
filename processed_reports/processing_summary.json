@@ -5,66 +5,126 @@
     "failed": 0,
     "skipped": 2,
     "processed": 1,
-    "duration": "7.8s",
-    "avg_per_image": "7.8s"
+    "duration": "9.3s",
+    "avg_per_image": "9.3s"
   },
   "results": {
     "successful": [
       {
         "status": "success",
-        "image": "lab_report_3.png",
-        "patient_name": "Samantha Miller",
-        "output_file": "lab_report_3_structured.json",
-        "duration": 7.658461809158325,
+        "image": "lab_report_1.png",
+        "patient_name": "Yash M. Patel",
+        "output_file": "lab_report_1_structured.json",
+        "duration": 9.157138109207153,
         "data": {
-          "patient_name": "Samantha Miller",
-          "age": "45",
-          "gender": "Female",
-          "doctor_name": "Dr. John Smith",
-          "date": "02/15/2044",
+          "patient_name": "Yash M. Patel",
+          "age": "21",
+          "gender": "Male",
+          "doctor_name": "Dr. Hiren Shah",
+          "date": "02 Dec, 2022",
           "comments": "",
           "test_results": [
             {
-              "test_name": "White Blood Cell Count",
-              "value": "8.3",
-              "unit": "x103/uL",
-              "reference_range": "3.8-10.8 x10?"
-            },
-            {
-              "test_name": "Hemoglobin",
-              "value": "12.8",
-              "unit": "g/dL",
-              "reference_range": "11.5-15.5 gdL"
-            },
-            {
-              "test_name": "Platelet Count",
-              "value": "275",
-              "unit": "x10°/uL",
-              "reference_range": "150-400 x10°/u"
-            },
-            {
-              "test_name": "Glucose",
-              "value": "142",
+              "test_name": "Chloride",
+              "value": "101.40",
               "unit": "mg/dL",
-              "reference_range": "65 - 99 mg/dL"
+              "reference_range": "98 - 107"
             },
             {
-              "test_name": "Cholesterol",
-              "value": "190",
+              "test_name": "Proteins",
+              "value": "36.80",
               "unit": "mg/dL",
-              "reference_range": "< 200 mg/dL"
+              "reference_range": "20-45"
             },
             {
-              "test_name": "HDL Cholesterol",
-              "value": "38",
+              "test_name": "Sugar",
+              "value": "54.10",
               "unit": "mg/dL",
-              "reference_range": "> 40 mg/dL"
+              "reference_range": "40-80"
             },
             {
-              "test_name": "TSH",
-              "value": "3.2",
-              "unit": "mIU/L",
-              "reference_range": "0.4-4.0 mIU/L"
+              "test_name": "Colour",
+              "value": "Colourless",
+              "unit": "",
+              "reference_range": ""
+            },
+            {
+              "test_name": "Quantity",
+              "value": "3 ml",
+              "unit": "",
+              "reference_range": ""
+            },
+            {
+              "test_name": "Appearance",
+              "value": "Clear",
+              "unit": "",
+              "reference_range": ""
+            },
+            {
+              "test_name": "Coagulum",
+              "value": "Present",
+              "unit": "",
+              "reference_range": ""
+            },
+            {
+              "test_name": "Blood",
+              "value": "Absent",
+              "unit": "",
+              "reference_range": ""
+            },
+            {
+              "test_name": "Total W.B.C. Count",
+              "value": "5500",
+              "unit": "",
+              "reference_range": ""
+            },
+            {
+              "test_name": "Polymorphs",
+              "value": "Present",
+              "unit": "",
+              "reference_range": ""
+            },
+            {
+              "test_name": "Lymphocytes",
+              "value": "Absent",
+              "unit": "",
+              "reference_range": ""
+            },
+            {
+              "test_name": "Any Others",
+              "value": "Absent",
+              "unit": "",
+              "reference_range": ""
+            },
+            {
+              "test_name": "RBC'S",
+              "value": "",
+              "unit": "",
+              "reference_range": ""
+            },
+            {
+              "test_name": "Z.N. Stain",
+              "value": "Absent",
+              "unit": "",
+              "reference_range": ""
+            },
+            {
+              "test_name": "Cram's Smear",
+              "value": "Absent",
+              "unit": "",
+              "reference_range": ""
+            },
+            {
+              "test_name": "AFB",
+              "value": "not detected",
+              "unit": "",
+              "reference_range": ""
+            },
+            {
+              "test_name": "Organism",
+              "value": "not detected",
+              "unit": "",
+              "reference_range": ""
             }
           ]
         }
@@ -73,14 +133,14 @@
     "failed": [],
     "skipped": [
       {
-        "image": "lab_report_1.png",
-        "reason": "already_processed",
-        "output_file": "lab_report_1_structured.json"
-      },
-      {
         "image": "lab_report_2.png",
         "reason": "already_processed",
         "output_file": "lab_report_2_structured.json"
+      },
+      {
+        "image": "lab_report_3.png",
+        "reason": "already_processed",
+        "output_file": "lab_report_3_structured.json"
       }
     ]
   }

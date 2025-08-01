@@ -1,9 +1,9 @@
 {
   "patient_name": "Yash M. Patel",
-  "age": "21 Years",
+  "age": "21",
   "gender": "Male",
   "doctor_name": "Dr. Hiren Shah",
-  "date": "02 Dec, 2022 05:00 PM",
+  "date": "02 Dec, 2022",
   "comments": "",
   "test_results": [
     {

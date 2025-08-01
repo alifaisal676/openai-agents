@@ -1,7 +1,8 @@
 
-# Lab Report Processing & Database Integration System
 
-This project provides a **complete end-to-end solution** for processing lab report images using AI agents and storing structured data in cloud databases. Features intelligent batch processing, duplicate detection, and seamless Supabase integration.
+# Lab Report Processing & Local Database System
+
+This project provides a complete solution for processing lab report images using AI agents and storing structured data in a local SQLite database. Features intelligent batch processing, duplicate detection, and a simple CLI for database inspection.
 
 ## 🚀 Key Features
 
@@ -19,13 +20,14 @@ This project provides a **complete end-to-end solution** for processing lab repo
 - **Efficiency Tracking:** Reports skipped vs. processed files
 - **Organized Output:** Structured file organization with batch summaries
 
-### **☁️ Cloud Database Integration**
-- **Supabase Integration:** Direct cloud PostgreSQL storage (works with free tier)
-- **REST API Based:** No direct database connections required
+
+### **🗄️ Local Database Integration**
+- **SQLite Storage:** All data is stored locally in a file-based SQLite database
 - **Automatic Table Creation:** Sets up schema automatically
 - **Duplicate Prevention:** Smart conflict resolution for patient data
 
-### **� Comprehensive Analytics**
+
+### **📊 Comprehensive Analytics**
 - **Processing Statistics:** Detailed timing and success metrics
 - **Database Analytics:** Patient counts, test types, and data insights
 - **Error Handling:** Robust error reporting and recovery
@@ -36,9 +38,10 @@ This project provides a **complete end-to-end solution** for processing lab repo
 - Python 3.8+
 - [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) installed and in PATH
 
+
 ### **Python Dependencies**
 ```bash
-pip install openai python-dotenv pillow pytesseract supabase
+pip install openai python-dotenv pillow pytesseract pydantic langchain-openai langsmith
 ```
 
 ### **Required Packages:**
@@ -46,62 +49,27 @@ pip install openai python-dotenv pillow pytesseract supabase
 - `python-dotenv` - Environment variable management
 - `pillow` - Image processing
 - `pytesseract` - OCR text extraction
-- `supabase` - Cloud database integration
+- `pydantic` - Data validation
+- `langchain-openai`, `langsmith` - LLM orchestration and tracing
 
 ## ⚙️ Setup
+
 
 ### **1. API Configuration**
 Create a `.env` file in the project directory:
 ```env
 # AI Processing (Required)
 GROQ_API_KEY=your_groq_api_key_here
-
-# Supabase Database (Required for database features)
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=your_anon_key_here
+# LangSmith Tracing (Optional)
+LANGCHAIN_TRACING_V2=true
+LANGCHAIN_API_KEY=your_langsmith_api_key
+LANGCHAIN_PROJECT=LabReportAgentTrace
 ```
 
-### **2. Supabase Database Setup**
-1. 🌐 Go to [supabase.com](https://supabase.com) and create account
-2. 🆕 Create new project (name it "lab_report_database")
-3. 📋 Go to Settings → API and copy:
-   - Project URL → `SUPABASE_URL`
-   - Anon public key → `SUPABASE_ANON_KEY`
-4. 🗄️ Go to SQL Editor and run this SQL:
-```sql
--- Create patients table
-CREATE TABLE IF NOT EXISTS patients (
-    id SERIAL PRIMARY KEY,
-    patient_id VARCHAR(100) UNIQUE NOT NULL,
-    patient_name VARCHAR(255) NOT NULL,
-    age VARCHAR(50),
-    gender VARCHAR(20),
-    doctor_name VARCHAR(255),
-    test_date DATE,
-    lab_name VARCHAR(255),
-    comments TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 
--- Create lab_tests table
-CREATE TABLE IF NOT EXISTS lab_tests (
-    id SERIAL PRIMARY KEY,
-    patient_id VARCHAR(100) NOT NULL,
-    test_name VARCHAR(255) NOT NULL,
-    test_result VARCHAR(255),
-    units VARCHAR(50),
-    reference_range VARCHAR(100),
-    status VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (patient_id) REFERENCES patients(patient_id) ON DELETE CASCADE
-);
+### **2. Database Setup**
+No manual setup required. The SQLite database file will be created automatically in the `labdb/` folder when you run the transfer script.
 
--- Create indexes for better performance
-CREATE INDEX IF NOT EXISTS idx_patients_patient_id ON patients(patient_id);
-CREATE INDEX IF NOT EXISTS idx_lab_tests_patient_id ON lab_tests(patient_id);
-CREATE INDEX IF NOT EXISTS idx_lab_tests_test_name ON lab_tests(test_name);
-```
 
 ### **3. Test Installation**
 ```bash
@@ -109,30 +77,30 @@ CREATE INDEX IF NOT EXISTS idx_lab_tests_test_name ON lab_tests(test_name);
 tesseract --version
 
 # Test Python dependencies
-python -c "import openai, pytesseract, supabase; print('✅ All dependencies installed')"
+python -c "import openai, pytesseract, pydantic, langchain_openai, langsmith; print('✅ All dependencies installed')"
 ```
 
 ## 🎯 Quick Start
 
 ### **Complete Workflow (Recommended)**
 
+
 #### **Step 1: Process Images**
 ```bash
-python batch_processor.py
+python batch_processor_clean.py
 ```
 - ✨ **Smart Processing:** Automatically skips already-processed files
 - 📁 **Auto-Discovery:** Finds all images in `lab_images/` directory
 - 🔄 **Resume Capability:** Continue from where you left off
 - 📊 **Live Progress:** Real-time processing statistics
 
-#### **Step 2: Transfer to Database**
+#### **Step 2: Transfer to Local Database**
 ```bash
-python supabase_transfer.py
+python sqlite_transfer.py
 ```
-- ☁️ **Cloud Storage:** Uploads to Supabase PostgreSQL
+- 🗄️ **Local Storage:** Uploads to SQLite database in `labdb/lab_reports.db`
 - 🚫 **Duplicate Prevention:** Skips existing patient records
 - 📈 **Analytics:** Provides comprehensive database statistics
-- ⚡ **Fast Transfer:** REST API-based uploads
 
 ### **Custom Processing Options**
 
@@ -153,7 +121,8 @@ python batch_processor.py --input "specific_image.jpg"
 
 ### **Processing Pipeline**
 ```
-📸 Lab Images → 🤖 AI Agents → 📄 JSON Data → ☁️ Supabase Database
+
+📸 Lab Images → 🤖 AI Agents → 📄 JSON Data → 🗄️ SQLite Database
 ```
 
 1. **🔍 Image Discovery:** Scans for lab report images (.png, .jpg, .jpeg, .tiff, .bmp)
@@ -162,7 +131,7 @@ python batch_processor.py --input "specific_image.jpg"
    - LLM structuring with Groq/OpenAI
    - Pydantic validation and cleaning
 3. **📁 Smart Storage:** Organized JSON output with OCR text files
-4. **🗄️ Database Integration:** Direct upload to Supabase cloud PostgreSQL
+4. **🗄️ Database Integration:** Direct upload to local SQLite database
 
 ### **Duplicate Detection System**
 - **File-Level Detection:** Checks for existing `*_structured.json` files
@@ -170,50 +139,24 @@ python batch_processor.py --input "specific_image.jpg"
 - **Efficiency Optimization:** Skips processing for existing results
 - **Resume Capability:** Continue large batch jobs seamlessly
 
+
 ### **Output Organization**
 ```
 processed_reports/
 ├── 📊 processing_summary.json           # Batch statistics & metrics
 ├── 📄 lab_report_1_structured.json     # Patient 1 structured data
 ├── 📄 lab_report_2_structured.json     # Patient 2 structured data
-├── 📁 ocr_outputs/                      # Raw OCR text files
+├── 📁 ocr_outputs/                     # Raw OCR text files
 │   ├── 🔤 lab_report_1_ocr.txt         # OCR extraction
 │   ├── 🔤 lab_report_2_ocr.txt
 │   └── ...
 └── 📋 batch_summary.json               # Processing statistics
 ```
 
-## 🗄️ Database Features
 
-### **Supabase Cloud Integration**
-- **🆓 Free Tier Compatible:** Uses REST API (no direct PostgreSQL connection)
-- **🔐 Secure Authentication:** API key-based access
-- **📈 Auto-Scaling:** Handles growing datasets automatically
-- **🌐 Global CDN:** Fast access from anywhere
-
-### **Database Schema**
-```sql
-patients table:
-- id (Primary Key)
-- patient_id (Unique identifier)
-- patient_name, age, gender
-- doctor_name, lab_name
-- test_date, comments
-- created_at, updated_at
-
-lab_tests table:
-- id (Primary Key)
-- patient_id (Foreign Key → patients.patient_id)
-- test_name, test_result, units
-- reference_range, status
-- created_at
-```
-
-### **Data Relationships**
-- **One-to-Many:** One patient → Multiple lab tests
-- **Referential Integrity:** Foreign key constraints
-- **Indexed Performance:** Optimized for queries
-- **Audit Trail:** Automatic timestamps
+## 🗄️ Database Schema
+- `patients`: id, patient_id, patient_name, age, gender, doctor_name, test_date, lab_name, comments, created_at
+- `lab_tests`: id, patient_id, test_name, test_result, units, reference_range, status, created_at
 
 ## 📊 Performance & Analytics
 
@@ -237,9 +180,10 @@ lab_tests table:
 🔤 OCR Files Generated: 13
 ```
 
+
 ### **Database Analytics**
 ```bash
-☁️  SUPABASE DATABASE SUMMARY
+🗄️  SQLITE DATABASE SUMMARY
 ==================================================
 👥 Total Patients in DB: 25
 🧪 Total Tests in DB: 342
@@ -287,15 +231,7 @@ additional_fields = {
 # Verify: tesseract --version
 ```
 
-#### **Supabase Connection Issues**
-```bash
-# Check project URL format
-SUPABASE_URL=https://your-project-id.supabase.co  ✅
-SUPABASE_URL=your-project-id.supabase.co          ❌
 
-# Verify API key is anon (public) key, not secret key
-# Test connection: python -c "from supabase import create_client; print('✅ Connected')"
-```
 
 #### **Processing Failures**
 ```bash
@@ -337,18 +273,13 @@ SPECIALIZED_PROMPTS = {
 
 ## 📚 Project Structure
 ```
-📁 lab_report_processing/
-├── 📄 batch_processor.py           # Main processing script
-├── 📄 supabase_transfer.py         # Database integration
-├── 📄 requirements.txt             # Python dependencies
-├── 📄 .env                         # API keys & configuration
-├── 📄 .env.example                 # Configuration template
-├── 📄 README.md                    # This documentation
-├── 📁 lab_images/                  # Input images directory
-├── 📁 processed_reports/           # Output JSON & OCR files
-│   ├── 📁 ocr_outputs/             # Raw OCR text files
-│   └── 📊 processing_summary.json  # Batch statistics
-└── 📁 __pycache__/                 # Python cache files
+
+lab_images/                # Input images
+processed_reports/         # Output JSON & OCR files
+labdb/                     # SQLite DB and related modules
+batch_processor_clean.py   # Batch processing entry point
+sqlite_transfer.py         # Database transfer & CLI
+README.md                  # This file
 ```
 
 ## 🎉 Success Stories
@@ -366,11 +297,12 @@ SPECIALIZED_PROMPTS = {
 - **🔬 Research Labs:** Batch process experimental results
 - **🏢 Healthcare Admin:** Automate patient data entry
 
-## �️ Database Schema
+
+## 🗄️ Database Schema
 - `patients`: id, patient_id, patient_name, age, gender, doctor_name, test_date, lab_name, comments, created_at
 - `lab_tests`: id, patient_id, test_name, test_result, units, reference_range, status, created_at
 
-## �️ Example Output
+## 🗄️ Example Output
 Batch processing and database transfer will log concise progress and summary info to the console. See `processed_reports/processing_summary.json` for batch stats.
 
 ## 🤝 Contributing & Support
