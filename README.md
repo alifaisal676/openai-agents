@@ -1,20 +1,22 @@
-# Prescription Processing Pipeline
+# 🏥 Smart Prescription Processing System
 
-A Python tool that extracts medicine information from prescription images using Azure OCR and AI models.
+An intelligent prescription reader that extracts medicine information from prescription images using Azure OCR and LLaMA AI with advanced validation.
 
-## Features
+## ✨ Features
 
-- **Image Enhancement**: Improves prescription image quality for better OCR
-- **Azure OCR Integration**: Extracts text from prescription images
-- **Dual AI Support**: Choose between BioGPT (local) or LLaMA (API)
-- **Medicine Validation**: Matches extracted medicines against known database
-- **Anti-Hallucination**: BioGPT mode uses OCR-only extraction to prevent false results
+- **🖼️ Smart Image Enhancement**: Automatically improves prescription image quality for better text recognition
+- **📄 Azure OCR Integration**: Powerful text extraction from prescription images
+- **🤖 LLaMA AI Processing**: Intelligent medicine extraction using state-of-the-art AI
+- **🧠 Dual AI Validation**: Smart filtering to avoid false positives like person names
+- **📚 Database Cross-Reference**: Validates medicines against trusted medicine database
+- **🎯 Modular Architecture**: Clean, organized code structure with separate modules
+- **📊 Professional Logging**: Timestamped logging for production use
 
-## Quick Start
+## 🚀 Quick Start
 
 1. **Install Dependencies**
 ```bash
-pip install opencv-python requests rapidfuzz python-dotenv openai transformers torch
+pip install opencv-python requests rapidfuzz python-dotenv openai
 ```
 
 2. **Setup Environment**
@@ -22,76 +24,108 @@ Create `.env` file:
 ```env
 AZURE_OCR_ENDPOINT=your_azure_endpoint
 AZURE_OCR_KEY=your_azure_key
-GROQ_API_KEY=your_groq_key  # Only for LLaMA
+GROQ_API_KEY=your_groq_api_key
 ```
 
-3. **Run**
+3. **Run the Pipeline**
 ```bash
-python simple_pipeline.py
+python run_prescription_processor.py
 ```
 
-## Usage
+## 📋 How It Works
 
-Place your prescription image as `pic.jpg` in the project folder. The tool will:
-- Enhance image quality
-- Extract text using Azure OCR
-- Find medicine names using AI
-- Validate against medicine database
-- Save results to `outputs/` folder
+1. **📸 Image Enhancement**: Converts to grayscale, removes noise, enhances contrast
+2. **🔍 Text Extraction**: Uses Azure OCR to read all text from the prescription
+3. **🧹 Text Cleaning**: Standardizes spacing, removes special characters
+4. **🤖 AI Extraction**: LLaMA AI intelligently finds medicine names, dosages, frequencies
+5. **✅ Smart Validation**: Filters out person names, clinic names, and false positives
+6. **📚 Database Verification**: Cross-checks against known medicine database with fuzzy matching
 
-## Model Options
+## 🏗️ Modular Architecture
 
-**BioGPT** (Recommended)
-- Runs locally
-- Medical-specific AI
-- No hallucinations
-- Requires: Azure OCR only
+The system is organized into clean, focused modules:
 
-**LLaMA**
-- Cloud-based via Groq
-- General AI model
-- JSON output
-- Requires: Azure OCR + Groq API
+- **`prescription_processor/`** - Main package
+  - `pipeline.py` - Main orchestration workflow
+  - `image_processor.py` - CV2 image enhancement
+  - `ocr_processor.py` - Azure OCR text extraction
+  - `llama_extractor.py` - AI medicine extraction
+  - `medicine_validator.py` - AI validation
+  - `database_utils.py` - Medicine database operations
+- **`run_prescription_processor.py`** - Main entry point
+- **`medicines_pk.js`** - Medicine database
 
-Change model in `main()`:
-```python
-model = "biogpt"  # or "llama"
-```
+## 📁 Input & Output
 
-## Output Files
+**Input**: Place your prescription image as `pic3.jpeg` in the project folder
 
-- `ocr_raw.txt` - Raw OCR text
-- `ocr_cleaned.txt` - Cleaned text
-- `output_raw.json` - Extracted medicines
-- `output_validated.json` - Validated results with confidence scores
-
-## Requirements
-
-- Python 3.7+
-- Azure Computer Vision API
-- Groq API (for LLaMA only)
-- `medicines.js` database file
-
-## Example Output
-
+**Output**: Clean JSON with extracted medicines:
 ```json
 [
   {
-    "medicine": "Paracetamol",
-    "dosage": "500mg",
-    "frequency": "BD",
-    "confidence": 95
+    "medicine": "Mylène",
+    "dosage": "4mg",
+    "frequency": "unknown",
+    "confidence": 85.2
   }
 ]
 ```
 
-## Notes
+## 💻 Usage Examples
 
-- BioGPT model downloads automatically on first run (~1.5GB)
-- Supports various prescription formats
-- Medicine validation uses fuzzy matching
-- Anti-hallucination measures prevent false medicine detection
+**Basic Usage:**
+```python
+from prescription_processor import process_prescription
 
-## License
+# Process a prescription image
+result = process_prescription("pic3.jpeg")
+print(result)
+```
+
+**Command Line:**
+```bash
+python run_prescription_processor.py
+```
+
+## 📂 Output Files
+
+The pipeline saves detailed outputs in the `outputs/` folder:
+- `ocr_raw.txt` - Raw text from Azure OCR
+- `ocr_cleaned.txt` - Cleaned and standardized text
+- `step1_extracted_medicines.json` - Initial AI extraction
+- `step2_validation_response.json` - AI validation results
+- `step3_llm_validated_medicines.json` - Filtered valid medicines
+- `step4_final_with_database.json` - Final results with database matching
+
+## 🔧 Requirements
+
+- Python 3.7+
+- Azure Computer Vision API (for OCR)
+- Groq API (for LLaMA AI)
+- `medicines_pk.js` database file (included)
+
+## 🎯 Key Improvements
+
+- **Modular Architecture**: Clean separation of concerns with focused modules
+- **Professional Logging**: Timestamped logging instead of print statements
+- **Smart Validation**: Distinguishes between real medicines and person names
+- **Database Context**: Uses medicine database to guide AI extraction
+- **Simple & Clean**: Humanized code without over-engineering
+- **Production Ready**: Proper package structure and error handling
+
+## 🚫 Anti-Hallucination Features
+
+- Dual LLaMA validation (extraction + verification)
+- Database-contextual AI prompting
+- Confidence thresholds to filter weak matches
+- Medicine database cross-referencing with fuzzy matching
+- Conservative validation approach
+
+## 📜 License
 
 MIT License
+
+---
+
+**Author**: AI Assistant (Humanized Version)  
+**Purpose**: Medical prescription digitization with intelligent validation
