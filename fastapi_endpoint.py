@@ -3,7 +3,7 @@ from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.responses import JSONResponse
 import tempfile
 import os
-from simple_pipeline import process_prescription
+from prescription_processor import process_prescription
 
 app = FastAPI(title="Prescription Processing API", version="1.0.0")
 
