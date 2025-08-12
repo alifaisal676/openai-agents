@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 def main():
     """🏥 Main function to run the prescription processing pipeline"""
-    result = process_prescription(image_path="pic3.jpeg")
+    result = process_prescription(image_path="pics/pic3.jpeg")
     print(json.dumps(result, indent=2, ensure_ascii=False))
     return result
 

@@ -1,7 +1,3 @@
-"""
-🖼️ Image Processing Module
-Handles prescription image enhancement for better OCR results.
-"""
 
 import cv2
 import logging

@@ -1,7 +1,3 @@
-"""
-🧠 Medicine Validation Module
-Handles AI-powered validation of extracted medicine names.
-"""
 
 import json
 import re
@@ -9,7 +5,7 @@ from openai import OpenAI
 import logging
 
 def smart_medicine_validation(potential_medicines, groq_api_key, groq_endpoint):
-    """🧠 AI validation with medicine database context"""
+   
     try:
         logging.info("Using AI to validate medicine names with database context...")
         
@@ -72,7 +68,6 @@ Respond with JSON:
         )
         
         validation_result = ai_validation_response.choices[0].message.content
-        logging.info(f"AI Validation completed. Preview: {validation_result[:200]}...")
         
         # Save validation details for debugging
         with open("outputs/llama_validation_response.txt", 'w', encoding='utf-8') as f:
@@ -90,7 +85,7 @@ Respond with JSON:
             try:
                 validated_medicines = json.loads(json_text)
             except json.JSONDecodeError as e:
-                print(f"   ⚠️ Validation JSON parsing failed: {e}")
+                logging.warning(f"Validation JSON parsing failed: {e}")
                 
                 # Clean up common JSON issues
                 cleaned_json = json_text.replace("'", '"')
@@ -99,10 +94,8 @@ Respond with JSON:
                 
                 try:
                     validated_medicines = json.loads(cleaned_json)
-                    print("   ✅ Validation JSON parsing succeeded after cleanup")
                 except json.JSONDecodeError as e2:
-                    print(f"   ❌ Validation JSON parsing failed even after cleanup: {e2}")
-                    print(f"   📝 Problematic JSON: {json_text[:200]}...")
+                    logging.error(f"Validation JSON parsing failed: {e2}")
                     return []
             
             return validated_medicines if isinstance(validated_medicines, list) else []
@@ -118,8 +111,6 @@ Respond with JSON:
 def fallback_medicine_validation(medicines, groq_key, groq_endpoint):
     """🔄 Fallback validation with specific pharmaceutical queries"""
     try:
-        logging.info("Using fallback validation with specific drug queries...")
-        
         client = OpenAI(api_key=groq_key, base_url=groq_endpoint)
         validated_results = []
         
@@ -156,13 +147,12 @@ Be generous - if there's reasonable chance this is a medicine, mark valid."""
                 if json_match:
                     result = json.loads(json_match.group(0))
                     validated_results.append(result)
-                    print(f"  Fallback check: {medicine_name} → {result.get('is_valid_medicine', False)}")
             except Exception as e:
-                print(f"  Fallback parsing failed for {medicine_name}: {e}")
+                logging.warning(f"Fallback parsing failed for {medicine_name}: {e}")
                 continue
         
         return validated_results
         
     except Exception as e:
-        print(f"Fallback validation failed: {e}")
+        logging.error(f"Fallback validation failed: {e}")
         return []

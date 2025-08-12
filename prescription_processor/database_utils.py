@@ -1,7 +1,3 @@
-"""
-📚 Database Utilities Module
-Handles medicine database operations and fuzzy matching.
-"""
 
 import re
 from rapidfuzz import fuzz, process

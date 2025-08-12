@@ -1,7 +1,4 @@
-"""
-🤖 LLaMA Medicine Extraction Module
-Handles AI-powered medicine extraction from prescription text.
-"""
+
 
 import json
 import re
@@ -91,77 +88,35 @@ JSON ONLY:'''
         f.write(f"LLAMA RESPONSE:\n{llama_response}")
     
     try:
-        # Parse the extraction response with improved error handling
-        extracted_medicines = []
-        
-        # First try to find JSON array pattern - be more aggressive
-        json_patterns = [
-            r'\[.*?\]',  # Standard array
-            r'\[\s*\{[^}]*\}\s*\]',  # Simple object in array
-            r'\[\s*\{[^}]*"medicine"[^}]*\}[^]]*\]'  # Object with medicine field
-        ]
-        
-        json_text = None
-        for pattern in json_patterns:
-            json_match = re.search(pattern, llama_response, re.DOTALL)
-            if json_match:
-                json_text = json_match.group(0)
-                break
-        
-        if not json_text:
+        # Simple JSON extraction
+        json_match = re.search(r'\[.*?\]', llama_response, re.DOTALL)
+        if json_match:
+            json_text = json_match.group(0)
+        else:
             json_text = llama_response.strip()
         
-        # Clean up the JSON more aggressively
-        logging.info(f"Raw JSON found: {json_text[:150]}...")
-        
-        # Remove any text after closing bracket
+        # Basic cleanup
         json_text = re.sub(r'\]\s*\([^)]*\).*$', ']', json_text, flags=re.DOTALL)
         json_text = re.sub(r'\]\s*Note:.*$', ']', json_text, flags=re.DOTALL)
-        json_text = re.sub(r'\}\s*\([^)]*\)', '}', json_text, flags=re.DOTALL)
         
-        # Try multiple parsing approaches
+        # Parse JSON
         try:
             extracted_medicines = json.loads(json_text)
-            logging.info("JSON parsing succeeded")
-        except json.JSONDecodeError as e:
-            logging.warning(f"Initial JSON parsing failed: {e}")
-            
-            # Try to clean up common JSON issues
-            cleaned_json = json_text.replace("'", '"')  # Replace single quotes
-            cleaned_json = re.sub(r',\s*}', '}', cleaned_json)  # Remove trailing commas
-            cleaned_json = re.sub(r',\s*]', ']', cleaned_json)  # Remove trailing commas
-            cleaned_json = re.sub(r'"\s*\([^)]*\)', '"', cleaned_json)  # Remove parenthetical notes
-            
+        except json.JSONDecodeError:
+            # Simple cleanup and retry
+            cleaned_json = json_text.replace("'", '"')
+            cleaned_json = re.sub(r',\s*}', '}', cleaned_json)
+            cleaned_json = re.sub(r',\s*]', ']', cleaned_json)
             try:
                 extracted_medicines = json.loads(cleaned_json)
-                logging.info("JSON parsing succeeded after cleanup")
-            except json.JSONDecodeError as e2:
-                logging.error(f"JSON parsing failed even after cleanup: {e2}")
-                logging.info(f"Cleaned JSON: {cleaned_json[:200]}...")
-                
-                # Last resort: try to extract individual medicine data manually
-                medicine_matches = re.findall(r'"medicine":\s*"([^"]*)"', llama_response)
-                dosage_matches = re.findall(r'"dosage":\s*"([^"]*)"', llama_response)
-                frequency_matches = re.findall(r'"frequency":\s*"([^"]*)"', llama_response)
-                
-                if medicine_matches:
-                    logging.info(f"Manual extraction found medicines: {medicine_matches}")
-                    extracted_medicines = []
-                    for i, med in enumerate(medicine_matches):
-                        medicine_obj = {"medicine": med}
-                        if i < len(dosage_matches):
-                            medicine_obj["dosage"] = dosage_matches[i]
-                        if i < len(frequency_matches):
-                            medicine_obj["frequency"] = frequency_matches[i]
-                        extracted_medicines.append(medicine_obj)
-                    logging.info("Manual extraction succeeded")
-                else:
-                    return []
+            except json.JSONDecodeError:
+                logging.error("JSON parsing failed")
+                return []
         
         if not isinstance(extracted_medicines, list):
             extracted_medicines = []
             
-        logging.info(f"LLaMA extracted {len(extracted_medicines)} medicines: {[m.get('medicine', '') for m in extracted_medicines]}")
+        logging.info(f"LLaMA extracted {len(extracted_medicines)} medicines")
         
         # Save extracted medicines
         with open("outputs/step1_extracted_medicines.json", 'w', encoding='utf-8') as f:
@@ -170,7 +125,7 @@ JSON ONLY:'''
         if not extracted_medicines:
             return []
         
-        # Step 2: Validate the extracted medicines with LLM
+        # Validate the extracted medicines
         from .medicine_validator import smart_medicine_validation
         validated_medicines = smart_medicine_validation(extracted_medicines, groq_key, groq_endpoint)
         
@@ -178,25 +133,17 @@ JSON ONLY:'''
         with open("outputs/step2_validation_response.json", 'w', encoding='utf-8') as f:
             json.dump(validated_medicines, f, indent=2, ensure_ascii=False)
         
-        # Step 3: Filter only valid medicines (balanced threshold)
+        # Filter valid medicines
         final_medicines = []
         for validated_med in validated_medicines:
-            if (validated_med.get('is_valid_medicine', False) and 
-                validated_med.get('confidence', 0) >= 0.7):  # Changed to >= to include 0.7
-                
-                medicine_name = validated_med.get('medicine')
-                
-                # Find the original medicine data for dosage/frequency
+            if validated_med.get('is_valid_medicine', False) and validated_med.get('confidence', 0) >= 0.7:
                 original_med = next((m for m in extracted_medicines if m.get('medicine') == validated_med.get('medicine')), {})
                 
                 final_medicines.append({
-                    "medicine": medicine_name,
+                    "medicine": validated_med.get('medicine'),
                     "dosage": original_med.get('dosage', ''),
                     "frequency": original_med.get('frequency', ''),
-                    "extracted_by": "llama_extraction",
-                    "validated_by": "llama_validation",
-                    "validation_confidence": validated_med.get('confidence', 0),
-                    "validation_notes": validated_med.get('validation_notes', '')
+                    "confidence": validated_med.get('confidence', 0)
                 })
         
         # Save final LLM validated medicines

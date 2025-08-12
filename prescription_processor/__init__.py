@@ -1,9 +1,3 @@
-"""
-🏥 Smart Prescription Processing System
-
-Intelligent prescription reader that extracts medicine information from images.
-Uses Azure OCR + LLaMA AI for extraction and validation against medicine database.
-"""
 
 from .image_processor import enhance_prescription_image
 from .ocr_processor import extract_text_from_prescription, clean_extracted_text
