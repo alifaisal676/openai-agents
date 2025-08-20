@@ -1,10 +1,11 @@
 
 import cv2
 import logging
+from langsmith import traceable
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
+@traceable(name="image_processor")
 def enhance_prescription_image(image_path):
     """🖼️ Enhance image quality for better OCR results"""
     try:

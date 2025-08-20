@@ -7,6 +7,7 @@ import os
 import json
 import logging
 from dotenv import load_dotenv
+from langsmith import traceable
 from .image_processor import enhance_prescription_image
 from .ocr_processor import extract_text_from_prescription, clean_extracted_text
 from .llama_extractor import extract_medicines_with_llm
@@ -15,12 +16,22 @@ from .database_utils import load_trusted_medicine_database, cross_reference_with
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+# Set up LangSmith tracing environment at module level
+load_dotenv()
+langchain_api_key = os.getenv('LANGCHAIN_API_KEY')
+if langchain_api_key:
+    os.environ["LANGCHAIN_TRACING_V2"] = os.getenv('LANGCHAIN_TRACING_V2', 'true')
+    os.environ["LANGCHAIN_API_KEY"] = langchain_api_key
+    os.environ["LANGCHAIN_PROJECT"] = os.getenv('LANGCHAIN_PROJECT', 'prescription_pipeline')
+    os.environ["LANGCHAIN_ENDPOINT"] = os.getenv('LANGCHAIN_ENDPOINT', 'https://api.smith.langchain.com')
+    logging.info(f"LangSmith tracing configured for project: {os.environ['LANGCHAIN_PROJECT']}")
+
+@traceable(run_type="chain", name="prescription_processing_pipeline")
 def process_prescription(image_path):
     """🏥 Main pipeline: Process prescription image with LLaMA extraction and validation"""
     
     try:
         # Load environment variables
-        load_dotenv()
         azure_endpoint = os.getenv('AZURE_OCR_ENDPOINT')
         azure_key = os.getenv('AZURE_OCR_KEY')
         groq_api_key = os.getenv('GROQ_API_KEY')

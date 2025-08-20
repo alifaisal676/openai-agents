@@ -4,7 +4,9 @@ import json
 import re
 from openai import OpenAI
 import logging
+from langsmith import traceable
 
+@traceable(run_type="llm", name="llama_medicine_extraction")
 def ask_llama_to_extract_medicines(prescription_text, groq_api_key, groq_endpoint):
     """🤖 Send prescription text to LLaMA for medicine extraction"""
     try:
@@ -29,6 +31,7 @@ def ask_llama_to_extract_medicines(prescription_text, groq_api_key, groq_endpoin
         logging.error(f"LLaMA AI analysis failed: {error}")
         return ""
 
+@traceable(run_type="chain", name="medicine_extraction_with_validation")
 def extract_medicines_with_llm(text, groq_key, groq_endpoint):
     """Extract medicines using LLaMA with medicine database context"""
     

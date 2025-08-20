@@ -7,10 +7,12 @@ import time
 import re
 import requests
 import logging
+from langsmith import traceable
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+@traceable(run_type="tool", name="azure_ocr_extraction")
 def extract_text_from_prescription(image_path, azure_endpoint, azure_key):
     """📄 Extract text from prescription using Azure OCR"""
     logging.info("Reading text from prescription image...")

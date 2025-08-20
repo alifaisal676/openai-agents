@@ -3,7 +3,9 @@ import json
 import re
 from openai import OpenAI
 import logging
+from langsmith import traceable
 
+@traceable(run_type="llm", name="medicine_validation")
 def smart_medicine_validation(potential_medicines, groq_api_key, groq_endpoint):
    
     try:
@@ -106,53 +108,4 @@ Respond with JSON:
             
     except Exception as validation_error:
         logging.error(f"Medicine validation failed: {validation_error}")
-        return []
-
-def fallback_medicine_validation(medicines, groq_key, groq_endpoint):
-    """🔄 Fallback validation with specific pharmaceutical queries"""
-    try:
-        client = OpenAI(api_key=groq_key, base_url=groq_endpoint)
-        validated_results = []
-        
-        for medicine in medicines:
-            medicine_name = medicine.get('medicine', '')
-            
-            specific_prompt = f"""As a pharmaceutical expert, determine if "{medicine_name}" is a legitimate medication.
-
-Consider: Generic names, brand names, international variants, antibiotics, etc.
-
-Respond with JSON:
-{{
-  "medicine": "{medicine_name}",
-  "is_valid_medicine": true/false,
-  "validation_notes": "explanation",
-  "confidence": 0.85
-}}
-
-Be generous - if there's reasonable chance this is a medicine, mark valid."""
-
-            response = client.chat.completions.create(
-                model="llama3-8b-8192",
-                messages=[
-                    {"role": "system", "content": "You are a pharmaceutical database expert. Be inclusive in your validation."},
-                    {"role": "user", "content": specific_prompt}
-                ],
-                temperature=0.1,
-                max_tokens=300
-            )
-            
-            try:
-                result_text = response.choices[0].message.content
-                json_match = re.search(r'\{.*?\}', result_text, re.DOTALL)
-                if json_match:
-                    result = json.loads(json_match.group(0))
-                    validated_results.append(result)
-            except Exception as e:
-                logging.warning(f"Fallback parsing failed for {medicine_name}: {e}")
-                continue
-        
-        return validated_results
-        
-    except Exception as e:
-        logging.error(f"Fallback validation failed: {e}")
         return []
